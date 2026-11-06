@@ -1,0 +1,210 @@
+<local:FlyoutWindow x:Class="AuraFlyout.Flyouts.SpeedFlyout"
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                    xmlns:local="clr-namespace:AuraFlyout.Flyouts"
+                    xmlns:c="clr-namespace:AuraFlyout.Controls"
+                    Title="AuraFlyout Speed test">
+    <!-- TaskbarSpeedTest's layout (gauge with the start button, ping / download / upload, server, recent
+         tests) in the same design as the other panels: header, tiles, type ramp, accent -->
+    <Window.Resources>
+        <Style x:Key="Tile" TargetType="Border">
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="12,10" />
+            <Setter Property="Margin" Value="3" />
+            <Setter Property="Background" Value="{DynamicResource AuraCardBrush}" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="1" />
+        </Style>
+        <Style x:Key="TileTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+        </Style>
+        <Style x:Key="TileValue" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+        </Style>
+        <Style x:Key="TileSub" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+        </Style>
+        <Style x:Key="Unit" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Margin" Value="4,0,0,3" />
+            <Setter Property="VerticalAlignment" Value="Bottom" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+        </Style>
+        <Style x:Key="ColHead" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorTertiaryBrush}" />
+        </Style>
+    </Window.Resources>
+
+    <Border x:Name="Root" CornerRadius="8" Width="380" Padding="12">
+        <StackPanel x:Name="Body">
+            <!-- header, like the other panels -->
+            <Grid Margin="4,0,0,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <TextBlock Text="{DynamicResource Speed_Title}" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock x:Name="LinkGlyph" Style="{StaticResource Glyph}" FontSize="12" Margin="0,1,5,0"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <TextBlock x:Name="SubtitleText" Style="{StaticResource TileSub}" />
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top">
+                    <Button Style="{StaticResource AuraIconButton}" Width="32" Height="30" Click="CopyCsv_Click" ToolTip="{DynamicResource Speed_CopyCsv}">
+                        <TextBlock Style="{StaticResource Glyph}" Text="&#xE8C8;" FontSize="16" />
+                    </Button>
+                    <Button Style="{StaticResource AuraIconButton}" Width="32" Height="30" Click="Settings_Click" ToolTip="{DynamicResource Tray_Settings}">
+                        <TextBlock Style="{StaticResource Glyph}" Text="&#xE713;" FontSize="16" />
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+            <!-- gauge with the start / stop button -->
+            <Border Style="{StaticResource Tile}" Height="232" Padding="0">
+                <Grid>
+                    <c:SpeedGauge x:Name="Gauge" Fill="{DynamicResource AuraAccentBrush}" Track="{DynamicResource ControlStrongFillColorDisabledBrush}"
+                                  LabelBrush="{DynamicResource TextFillColorTertiaryBrush}" />
+                    <StackPanel x:Name="ValuePanel" VerticalAlignment="Top" Margin="0,60,0,0">
+                        <TextBlock x:Name="PhaseText" Style="{StaticResource TileTitle}" HorizontalAlignment="Center" />
+                        <TextBlock x:Name="LiveText" FontSize="40" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,-4,0,-4"
+                                   Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                        <TextBlock x:Name="UnitText" Style="{StaticResource TileTitle}" HorizontalAlignment="Center" />
+                    </StackPanel>
+                    <StackPanel x:Name="ReadyPanel" VerticalAlignment="Top" Margin="0,66,0,0" Visibility="Collapsed">
+                        <TextBlock Style="{StaticResource Glyph}" Text="&#xEC4A;" FontSize="34" Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                        <TextBlock Text="{DynamicResource Speed_ReadyLong}" Style="{StaticResource TileTitle}" HorizontalAlignment="Center" Margin="0,8,0,0" />
+                    </StackPanel>
+                    <StackPanel x:Name="ErrorPanel" VerticalAlignment="Top" Margin="0,58,0,0" Width="200" Visibility="Collapsed">
+                        <TextBlock Style="{StaticResource Glyph}" Text="&#xE783;" FontSize="22" Foreground="{DynamicResource SystemFillColorCriticalBrush}" />
+                        <TextBlock Text="{DynamicResource Speed_Failed}" FontSize="14" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,4,0,0"
+                                   Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                        <TextBlock x:Name="ErrorText" FontSize="12" TextWrapping="Wrap" TextAlignment="Center" MaxHeight="34" TextTrimming="CharacterEllipsis"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    </StackPanel>
+                    <!-- not focusable: typing elsewhere must never start a (data heavy) test -->
+                    <ui:Button x:Name="RunButton" Appearance="Primary" VerticalAlignment="Bottom" HorizontalAlignment="Center" MinWidth="150"
+                               Margin="0,0,0,18" Click="Run_Click" Focusable="False" />
+                </Grid>
+            </Border>
+
+            <!-- ping, download, upload -->
+            <UniformGrid Columns="3">
+                <Border x:Name="PingCard" Style="{StaticResource Tile}">
+                    <Grid>
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource Glyph}" Text="&#xE916;" FontSize="12" Margin="0,0,6,0" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                <TextBlock Text="Ping" Style="{StaticResource TileTitle}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock x:Name="PingText" Style="{StaticResource TileValue}" />
+                                <TextBlock x:Name="PingUnit" Style="{StaticResource Unit}" />
+                            </StackPanel>
+                            <TextBlock x:Name="JitterText" Style="{StaticResource TileSub}" />
+                        </StackPanel>
+                        <Border x:Name="PingProgress" Height="3" CornerRadius="1.5" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0,0,0,-4"
+                                Visibility="Collapsed" Background="{DynamicResource AuraAccentBrush}" />
+                    </Grid>
+                </Border>
+                <Border x:Name="DownCard" Style="{StaticResource Tile}">
+                    <Grid>
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource Glyph}" Text="&#xE896;" FontSize="12" Margin="0,0,6,0" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                <TextBlock Text="{DynamicResource Speed_Download}" Style="{StaticResource TileTitle}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock x:Name="DownText" Style="{StaticResource TileValue}" />
+                                <TextBlock x:Name="DownUnit" Style="{StaticResource Unit}" />
+                            </StackPanel>
+                        </StackPanel>
+                        <Border x:Name="DownProgress" Height="3" CornerRadius="1.5" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0,0,0,-4"
+                                Visibility="Collapsed" Background="{DynamicResource AuraAccentBrush}" />
+                    </Grid>
+                </Border>
+                <Border x:Name="UpCard" Style="{StaticResource Tile}">
+                    <Grid>
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource Glyph}" Text="&#xE898;" FontSize="12" Margin="0,0,6,0" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                <TextBlock Text="{DynamicResource Speed_Upload}" Style="{StaticResource TileTitle}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock x:Name="UpText" Style="{StaticResource TileValue}" />
+                                <TextBlock x:Name="UpUnit" Style="{StaticResource Unit}" />
+                            </StackPanel>
+                        </StackPanel>
+                        <Border x:Name="UpProgress" Height="3" CornerRadius="1.5" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0,0,0,-4"
+                                Visibility="Collapsed" Background="{DynamicResource AuraAccentBrush}" />
+                    </Grid>
+                </Border>
+            </UniformGrid>
+
+            <!-- network and server -->
+            <StackPanel Orientation="Horizontal" Margin="7,4,7,6">
+                <TextBlock Style="{StaticResource Glyph}" Text="&#xE774;" FontSize="12" Margin="0,1,6,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                <TextBlock x:Name="ServerText" Style="{StaticResource TileSub}" MaxWidth="320" />
+            </StackPanel>
+
+            <!-- recent tests -->
+            <Border x:Name="HistoryCard" Style="{StaticResource Tile}" Padding="12,6,12,4">
+                <StackPanel>
+                    <Grid Height="26">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="76" />
+                            <ColumnDefinition Width="76" />
+                            <ColumnDefinition Width="52" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{DynamicResource Speed_History}" Style="{StaticResource TileTitle}" />
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <TextBlock Style="{StaticResource Glyph}" Text="&#xE896;" FontSize="11" Margin="0,0,4,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                            <TextBlock x:Name="DownHead" Style="{StaticResource ColHead}" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <TextBlock Style="{StaticResource Glyph}" Text="&#xE898;" FontSize="11" Margin="0,0,4,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                            <TextBlock x:Name="UpHead" Style="{StaticResource ColHead}" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <TextBlock Style="{StaticResource Glyph}" Text="&#xE916;" FontSize="11" Margin="0,0,4,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                            <TextBlock Text="ms" Style="{StaticResource ColHead}" />
+                        </StackPanel>
+                    </Grid>
+                    <ItemsControl x:Name="HistoryList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Height="28">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="76" />
+                                        <ColumnDefinition Width="76" />
+                                        <ColumnDefinition Width="52" />
+                                    </Grid.ColumnDefinitions>
+                                    <Border Grid.ColumnSpan="4" Height="1" VerticalAlignment="Top" Background="{DynamicResource DividerStrokeColorDefaultBrush}" />
+                                    <TextBlock Text="{Binding When}" FontSize="12" VerticalAlignment="Center" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                    <TextBlock Grid.Column="1" Text="{Binding Down}" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Right"
+                                               Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                                    <TextBlock Grid.Column="2" Text="{Binding Up}" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Right"
+                                               Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                                    <TextBlock Grid.Column="3" Text="{Binding Ping}" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Right"
+                                               Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </Border>
+</local:FlyoutWindow>

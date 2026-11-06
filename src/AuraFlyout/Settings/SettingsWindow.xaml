@@ -1,0 +1,103 @@
+<ui:FluentWindow x:Class="AuraFlyout.Settings.SettingsWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 Title="AuraFlyout" Width="1040" Height="720" MinWidth="760" MinHeight="520"
+                 WindowStartupLocation="CenterScreen"
+                 ExtendsContentIntoTitleBar="True" WindowBackdropType="Mica" WindowCornerPreference="Round"
+                 Icon="pack://application:,,,/AuraFlyout;component/Assets/AuraFlyout.ico">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <ui:TitleBar Title="AuraFlyout" Grid.Row="0">
+            <ui:TitleBar.Icon>
+                <ui:ImageIcon Source="{StaticResource AppIconSmall}" />
+            </ui:TitleBar.Icon>
+        </ui:TitleBar>
+
+        <Grid x:Name="Body" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="260" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- navigation -->
+            <DockPanel Margin="12,4,8,12">
+                <!-- "Find a setting", like Windows Settings: searches every card's title and description -->
+                <Grid DockPanel.Dock="Top" Margin="4,0,4,12">
+                    <ui:TextBox x:Name="SearchBox" PlaceholderText="{DynamicResource Settings_Search}" ClearButtonEnabled="True"
+                                Icon="{ui:SymbolIcon Search24}" IconPlacement="Right"
+                                TextChanged="Search_TextChanged" PreviewKeyDown="Search_KeyDown" />
+                    <Popup x:Name="SearchPopup" PlacementTarget="{Binding ElementName=SearchBox}" Placement="Bottom" VerticalOffset="4"
+                           StaysOpen="False" AllowsTransparency="True" PopupAnimation="Slide" Width="{Binding ActualWidth, ElementName=SearchBox}">
+                        <Border CornerRadius="8" Padding="4" Margin="0,0,8,8" Background="{DynamicResource SolidBackgroundFillColorTertiaryBrush}"
+                                BorderBrush="{DynamicResource SurfaceStrokeColorFlyoutBrush}" BorderThickness="1">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="16" ShadowDepth="4" Opacity="0.25" />
+                            </Border.Effect>
+                            <Grid>
+                                <ListBox x:Name="SearchResults" MaxHeight="360" Background="Transparent" BorderThickness="0"
+                                         ItemContainerStyle="{StaticResource NavItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                         PreviewMouseLeftButtonUp="SearchResults_Click" PreviewKeyDown="SearchResults_KeyDown">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding Title}" FontSize="14" TextTrimming="CharacterEllipsis"
+                                                           Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                                                <TextBlock Text="{Binding Page}" FontSize="12" TextTrimming="CharacterEllipsis"
+                                                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                                <TextBlock x:Name="NoResults" Text="{DynamicResource Settings_NoResults}" Margin="12,10" Visibility="Collapsed"
+                                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                            </Grid>
+                        </Border>
+                    </Popup>
+                </Grid>
+                <ListBox x:Name="Nav" DockPanel.Dock="Top" Background="Transparent" BorderThickness="0"
+                         ItemContainerStyle="{StaticResource NavItem}" SelectionChanged="Nav_SelectionChanged"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <!-- section headers, like the groups of Windows Settings -->
+                    <ListBox.GroupStyle>
+                        <GroupStyle>
+                            <GroupStyle.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock x:Name="Header" Text="{Binding Name}" FontSize="12" FontWeight="SemiBold" Margin="14,14,0,4"
+                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding Name}" Value="">
+                                            <Setter TargetName="Header" Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </DataTemplate.Triggers>
+                                </DataTemplate>
+                            </GroupStyle.HeaderTemplate>
+                        </GroupStyle>
+                    </ListBox.GroupStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <ui:SymbolIcon Symbol="{Binding Icon}" FontSize="18" Margin="0,0,14,0"
+                                               Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                                <TextBlock Text="{Binding Title}" FontSize="14" VerticalAlignment="Center"
+                                           Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+
+            <!-- page -->
+            <Border Grid.Column="1" CornerRadius="8,0,0,0" Background="{DynamicResource LayerFillColorDefaultBrush}"
+                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="1,1,0,0">
+                <ScrollViewer x:Name="PageScroller" VerticalScrollBarVisibility="Auto" Padding="36,28,36,28">
+                    <ContentControl x:Name="PageHost" MaxWidth="1000" Focusable="False" />
+                </ScrollViewer>
+            </Border>
+        </Grid>
+    </Grid>
+</ui:FluentWindow>

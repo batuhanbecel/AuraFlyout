@@ -1,0 +1,61 @@
+<UserControl x:Class="AuraFlyout.Settings.Pages.TaskbarPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:c="clr-namespace:AuraFlyout.Controls">
+    <StackPanel>
+        <TextBlock Style="{StaticResource PageTitle}" Text="{DynamicResource Nav_Taskbar}" />
+
+        <c:SettingCard Icon="TabDesktopBottom24" Title="{DynamicResource Taskbar_Enable}" Description="{DynamicResource Taskbar_EnableDesc}">
+            <ui:ToggleSwitch IsChecked="{Binding TaskbarWidgetEnabled}" />
+        </c:SettingCard>
+
+        <StackPanel IsEnabled="{Binding TaskbarWidgetEnabled}">
+            <c:SettingCard Icon="AlignLeft24" Title="{DynamicResource Common_Position}" Description="{DynamicResource Layout_OpenDesc}">
+                <ui:Button Content="{DynamicResource Nav_Layout}" Icon="{ui:SymbolIcon AppsList24}" Click="Layout_Click" />
+            </c:SettingCard>
+            <c:SettingCard Icon="ArrowSwap24" Title="{DynamicResource Taskbar_Offset}" Description="{DynamicResource Taskbar_OffsetDesc}">
+                <StackPanel Orientation="Horizontal">
+                    <Slider Minimum="-300" Maximum="600" TickFrequency="2" IsSnapToTickEnabled="True" Width="180" VerticalAlignment="Center"
+                            Value="{Binding TaskbarWidgetOffset}" />
+                    <TextBlock Style="{StaticResource ValueLabel}" Text="{Binding TaskbarWidgetOffset, StringFormat={}{0} px}" />
+                </StackPanel>
+            </c:SettingCard>
+
+            <c:SettingExpander Icon="PaintBrush24" Title="{DynamicResource Media_Layout}" Description="{DynamicResource Taskbar_LookDesc}">
+                <StackPanel>
+            <c:SettingCard Icon="Image24" Title="{DynamicResource Taskbar_Cover}">
+                <ui:ToggleSwitch IsChecked="{Binding TaskbarWidgetShowCover}" />
+            </c:SettingCard>
+            <c:SettingCard Icon="Play24" Title="{DynamicResource Taskbar_Controls}" Description="{DynamicResource Taskbar_ControlsDesc}">
+                <ui:ToggleSwitch IsChecked="{Binding TaskbarWidgetShowControls}" />
+            </c:SettingCard>
+            <c:SettingCard Icon="Resize24" Title="{DynamicResource Taskbar_FixedWidth}" Description="{DynamicResource Taskbar_FixedWidthDesc}">
+                <ui:ToggleSwitch IsChecked="{Binding TaskbarWidgetFixedWidth}" />
+            </c:SettingCard>
+            <c:SettingCard Icon="Resize24" Title="{DynamicResource Taskbar_Width}" Description="{DynamicResource Taskbar_WidthDesc}">
+                <StackPanel Orientation="Horizontal">
+                    <Slider Minimum="140" Maximum="420" TickFrequency="5" IsSnapToTickEnabled="True" Width="180" VerticalAlignment="Center"
+                            Value="{Binding TaskbarWidgetWidth}" />
+                    <TextBlock Style="{StaticResource ValueLabel}" Text="{Binding TaskbarWidgetWidth, StringFormat={}{0} px}" />
+                </StackPanel>
+            </c:SettingCard>
+            <c:SettingCard Icon="Pause24" Title="{DynamicResource Taskbar_PauseDim}" Description="{DynamicResource Taskbar_PauseDimDesc}">
+                <ui:ToggleSwitch IsChecked="{Binding TaskbarWidgetPauseDim}" />
+            </c:SettingCard>
+            <c:SettingCard Icon="EyeOff24" Title="{DynamicResource Taskbar_HideIdle}" Description="{DynamicResource Taskbar_HideIdleDesc}">
+                <ui:ToggleSwitch IsChecked="{Binding TaskbarWidgetHideWhenIdle}" />
+            </c:SettingCard>
+                </StackPanel>
+            </c:SettingExpander>
+
+            <c:SettingHeader Text="{DynamicResource Taskbar_Behavior}" />
+            <c:SettingCard Icon="CursorClick24" Title="{DynamicResource Taskbar_Click}" Description="{DynamicResource Taskbar_ClickDesc}">
+                <ui:ToggleSwitch IsChecked="{Binding TaskbarWidgetClickOpensFlyout}" />
+            </c:SettingCard>
+            <c:SettingCard Icon="PhoneVerticalScroll24" Title="{DynamicResource Taskbar_Scroll}" Description="{DynamicResource Taskbar_ScrollDesc}">
+                <ui:ToggleSwitch IsChecked="{Binding TaskbarWidgetScrollVolume}" />
+            </c:SettingCard>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

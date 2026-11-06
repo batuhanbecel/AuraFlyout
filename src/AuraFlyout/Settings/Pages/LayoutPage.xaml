@@ -1,0 +1,63 @@
+<UserControl x:Class="AuraFlyout.Settings.Pages.LayoutPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:c="clr-namespace:AuraFlyout.Controls">
+    <StackPanel>
+        <TextBlock Style="{StaticResource PageTitle}" Text="{DynamicResource Nav_Layout}" />
+        <TextBlock Text="{DynamicResource Layout_Intro}" TextWrapping="Wrap" Margin="0,-8,0,16" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+
+        <!-- a miniature taskbar: three zones, items in their real left-to-right order -->
+        <Border CornerRadius="8" Padding="10" Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="{DynamicResource Dock_Left}" FontSize="12" FontWeight="SemiBold" Margin="2,0,0,6" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    <WrapPanel x:Name="LeftZone" MinHeight="44" />
+                </StackPanel>
+                <Border Grid.Column="1" Width="1" Margin="8,0" Background="{DynamicResource DividerStrokeColorDefaultBrush}" />
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="{DynamicResource Dock_Center}" FontSize="12" FontWeight="SemiBold" Margin="2,0,0,6" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    <WrapPanel x:Name="CenterZone" MinHeight="44" />
+                </StackPanel>
+                <Border Grid.Column="3" Width="1" Margin="8,0" Background="{DynamicResource DividerStrokeColorDefaultBrush}" />
+                <StackPanel Grid.Column="4">
+                    <TextBlock Text="{DynamicResource Layout_RightZone}" FontSize="12" FontWeight="SemiBold" Margin="2,0,0,6" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    <WrapPanel x:Name="RightZone" MinHeight="44" />
+                </StackPanel>
+            </Grid>
+        </Border>
+        <TextBlock Text="{DynamicResource Layout_Hint}" TextWrapping="Wrap" FontSize="12" Margin="2,8,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+
+        <c:SettingHeader Text="{DynamicResource Media_Layout}" />
+        <c:SettingCard Icon="TextFontSize24" Title="{DynamicResource Status_FontSize}" Description="{DynamicResource Layout_TextAll}">
+            <StackPanel Orientation="Horizontal">
+                <Slider Minimum="9" Maximum="18" TickFrequency="1" IsSnapToTickEnabled="True" Width="180" VerticalAlignment="Center" Value="{Binding TaskbarFontSize}" />
+                <TextBlock Style="{StaticResource ValueLabel}" Text="{Binding TaskbarFontSize, StringFormat={}{0} px}" />
+            </StackPanel>
+        </c:SettingCard>
+        <c:SettingCard Icon="TextBold24" Title="{DynamicResource Status_Bold}" Description="{DynamicResource Layout_BoldDesc}">
+            <ui:ToggleSwitch IsChecked="{Binding TaskbarBold}" />
+        </c:SettingCard>
+        <c:SettingCard Icon="CursorHover24" Title="{DynamicResource Layout_Hover}" Description="{DynamicResource Layout_HoverDesc}">
+            <ui:ToggleSwitch IsChecked="{Binding TaskbarWidgetHoverBackground}" />
+        </c:SettingCard>
+        <c:SettingCard Icon="ArrowSwap24" Title="{DynamicResource Layout_Gap}" Description="{DynamicResource Layout_GapDesc}">
+            <StackPanel Orientation="Horizontal">
+                <Slider Minimum="0" Maximum="32" TickFrequency="1" IsSnapToTickEnabled="True" Width="180" VerticalAlignment="Center" Value="{Binding TaskbarGap}" />
+                <TextBlock Style="{StaticResource ValueLabel}" Text="{Binding TaskbarGap, StringFormat={}{0} px}" />
+            </StackPanel>
+        </c:SettingCard>
+        <c:SettingCard Icon="Desktop24" Title="{DynamicResource Taskbar_Monitor}" Description="{DynamicResource Layout_MonitorDesc}">
+            <ComboBox x:Name="MonitorCombo" MinWidth="180" SelectionChanged="Monitor_Changed" />
+        </c:SettingCard>
+        <ui:Button Margin="0,8,0,0" Icon="{ui:SymbolIcon ArrowReset24}" Content="{DynamicResource Layout_Reset}" Click="Reset_Click" />
+    </StackPanel>
+</UserControl>

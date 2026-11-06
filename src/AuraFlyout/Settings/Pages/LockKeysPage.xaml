@@ -1,0 +1,48 @@
+<UserControl x:Class="AuraFlyout.Settings.Pages.LockKeysPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:c="clr-namespace:AuraFlyout.Controls">
+    <StackPanel>
+        <TextBlock Style="{StaticResource PageTitle}" Text="{DynamicResource Nav_LockKeys}" />
+
+        <c:SettingCard Icon="Keyboard24" Title="{DynamicResource Lock_Enable}" Description="{DynamicResource Lock_EnableDesc}">
+            <ui:ToggleSwitch IsChecked="{Binding LockKeysEnabled}" />
+        </c:SettingCard>
+
+        <StackPanel IsEnabled="{Binding LockKeysEnabled}">
+            <c:SettingHeader Text="{DynamicResource Lock_Keys}" />
+            <c:SettingCard Icon="KeyboardShiftUppercase24" Title="Caps Lock">
+                <ui:ToggleSwitch IsChecked="{Binding LockKeysCaps}" />
+            </c:SettingCard>
+            <c:SettingCard Icon="NumberSymbol24" Title="Num Lock">
+                <ui:ToggleSwitch IsChecked="{Binding LockKeysNum}" />
+            </c:SettingCard>
+            <c:SettingCard Icon="PhoneVerticalScroll24" Title="Scroll Lock">
+                <ui:ToggleSwitch IsChecked="{Binding LockKeysScroll}" />
+            </c:SettingCard>
+            <c:SettingCard Icon="TextT24" Title="Insert">
+                <ui:ToggleSwitch IsChecked="{Binding LockKeysInsert}" />
+            </c:SettingCard>
+
+            <c:SettingHeader Text="{DynamicResource Media_Layout}" />
+            <c:SettingCard Icon="AlignBottom24" Title="{DynamicResource Common_Position}">
+                <ComboBox SelectedIndex="{Binding LockKeysPosition}" MinWidth="180">
+                    <ComboBoxItem Content="{DynamicResource Pos_BottomCenter}" />
+                    <ComboBoxItem Content="{DynamicResource Pos_BottomLeft}" />
+                    <ComboBoxItem Content="{DynamicResource Pos_BottomRight}" />
+                    <ComboBoxItem Content="{DynamicResource Pos_TopCenter}" />
+                    <ComboBoxItem Content="{DynamicResource Pos_TopLeft}" />
+                    <ComboBoxItem Content="{DynamicResource Pos_TopRight}" />
+                </ComboBox>
+            </c:SettingCard>
+            <c:SettingCard Icon="Timer24" Title="{DynamicResource Common_Duration}">
+                <StackPanel Orientation="Horizontal">
+                    <Slider Minimum="500" Maximum="5000" TickFrequency="250" IsSnapToTickEnabled="True" Width="180" VerticalAlignment="Center"
+                            Value="{Binding LockKeysDuration}" />
+                    <TextBlock Style="{StaticResource ValueLabel}" Text="{Binding LockKeysDuration, Converter={StaticResource MsToSeconds}}" />
+                </StackPanel>
+            </c:SettingCard>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

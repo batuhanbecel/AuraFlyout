@@ -1,0 +1,79 @@
+<UserControl x:Class="AuraFlyout.Settings.Pages.SpeedPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:c="clr-namespace:AuraFlyout.Controls">
+    <StackPanel>
+        <TextBlock Style="{StaticResource PageTitle}" Text="{DynamicResource Nav_Speed}" />
+        <TextBlock Text="{DynamicResource Speed_Intro}" TextWrapping="Wrap" Margin="0,-8,0,12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+
+        <c:SettingCard Icon="TopSpeed24" Title="{DynamicResource Speed_Enable}" Description="{DynamicResource Speed_EnableDesc}">
+            <ui:ToggleSwitch IsChecked="{Binding SpeedEnabled}" />
+        </c:SettingCard>
+
+        <StackPanel IsEnabled="{Binding SpeedEnabled}">
+            <WrapPanel Margin="0,8,0,0">
+                <ui:Button x:Name="RunButton" Appearance="Primary" Icon="{ui:SymbolIcon Play24}" Content="{DynamicResource Speed_RunTest}" Margin="0,0,8,8" Click="Run_Click" />
+                <ui:Button Icon="{ui:SymbolIcon Copy24}" Content="{DynamicResource Speed_Copy}" Margin="0,0,8,8" Click="Copy_Click" />
+                <ui:Button Icon="{ui:SymbolIcon DocumentTable24}" Content="{DynamicResource Speed_CopyCsv}" Margin="0,0,8,8" Click="Csv_Click" />
+                <ui:Button Icon="{ui:SymbolIcon Delete24}" Content="{DynamicResource Speed_Clear}" Margin="0,0,8,8" Click="Clear_Click" />
+            </WrapPanel>
+
+            <c:SettingHeader Text="{DynamicResource Speed_Test}" />
+            <c:SettingCard Icon="Timer24" Title="{DynamicResource Speed_Length}" Description="{DynamicResource Speed_LengthDesc}">
+                <ComboBox x:Name="LengthCombo" MinWidth="200" SelectionChanged="Length_Changed">
+                    <ComboBoxItem Content="{DynamicResource Speed_Quick}" Tag="5" />
+                    <ComboBoxItem Content="{DynamicResource Speed_Standard}" Tag="10" />
+                    <ComboBoxItem Content="{DynamicResource Speed_Thorough}" Tag="15" />
+                </ComboBox>
+            </c:SettingCard>
+            <c:SettingCard Icon="ArrowRepeatAll24" Title="{DynamicResource Speed_Auto}" Description="{DynamicResource Speed_AutoDesc}">
+                <ComboBox x:Name="AutoCombo" MinWidth="200" SelectionChanged="Auto_Changed">
+                    <ComboBoxItem Content="{DynamicResource Speed_Off}" Tag="0" />
+                    <ComboBoxItem Content="{DynamicResource Speed_Every1}" Tag="1" />
+                    <ComboBoxItem Content="{DynamicResource Speed_Every3}" Tag="3" />
+                    <ComboBoxItem Content="{DynamicResource Speed_Every6}" Tag="6" />
+                    <ComboBoxItem Content="{DynamicResource Speed_Every12}" Tag="12" />
+                    <ComboBoxItem Content="{DynamicResource Speed_Daily}" Tag="24" />
+                </ComboBox>
+            </c:SettingCard>
+            <c:SettingCard Icon="TopSpeed24" Title="{DynamicResource Speed_Unit}">
+                <ComboBox SelectedIndex="{Binding SpeedUnit}" MinWidth="200">
+                    <ComboBoxItem Content="{DynamicResource Speed_Mbps}" />
+                    <ComboBoxItem Content="{DynamicResource Speed_MBps}" />
+                </ComboBox>
+            </c:SettingCard>
+
+            <c:SettingHeader Text="{DynamicResource Speed_Widget}" />
+            <c:SettingCard Icon="ArrowDown24" Title="{DynamicResource Speed_Download}">
+                <ui:ToggleSwitch IsChecked="{Binding SpeedWidgetDownload}" />
+            </c:SettingCard>
+            <c:SettingCard Icon="ArrowUp24" Title="{DynamicResource Speed_Upload}">
+                <ui:ToggleSwitch IsChecked="{Binding SpeedWidgetUpload}" />
+            </c:SettingCard>
+            <c:SettingCard Icon="Timer24" Title="Ping">
+                <ui:ToggleSwitch IsChecked="{Binding SpeedWidgetPing}" />
+            </c:SettingCard>
+            <c:SettingCard Icon="TextT24" Title="{DynamicResource Speed_Units}">
+                <ui:ToggleSwitch IsChecked="{Binding SpeedWidgetUnits}" />
+            </c:SettingCard>
+            <c:SettingCard Icon="TextAlignJustify24" Title="{DynamicResource Status_TwoLines}">
+                <ui:ToggleSwitch IsChecked="{Binding SpeedTwoLines}" />
+            </c:SettingCard>
+
+            <c:SettingHeader Text="{DynamicResource Dock_Header}" />
+            <c:SettingCard Icon="AlignRight24" Title="{DynamicResource Common_Position}" Description="{DynamicResource Layout_OpenDesc}">
+                <ui:Button Content="{DynamicResource Nav_Layout}" Icon="{ui:SymbolIcon AppsList24}" Click="Layout_Click" />
+            </c:SettingCard>
+            <c:SettingCard Icon="ArrowSwap24" Title="{DynamicResource Taskbar_Offset}" Description="{DynamicResource Dock_OffsetDesc}">
+                <StackPanel Orientation="Horizontal">
+                    <Slider Minimum="-100" Maximum="400" TickFrequency="2" IsSnapToTickEnabled="True" Width="180" VerticalAlignment="Center" Value="{Binding SpeedOffset}" />
+                    <TextBlock Style="{StaticResource ValueLabel}" Text="{Binding SpeedOffset, StringFormat={}{0} px}" />
+                </StackPanel>
+            </c:SettingCard>
+
+            <ui:InfoBar Title="{DynamicResource Speed_DataTitle}" Message="{DynamicResource Speed_DataMsg}" IsOpen="True" IsClosable="False"
+                        Severity="Warning" Margin="0,12,0,0" />
+        </StackPanel>
+    </StackPanel>
+</UserControl>

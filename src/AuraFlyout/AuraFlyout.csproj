@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.22621.0</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <LangVersion>preview</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RootNamespace>AuraFlyout</RootNamespace>
+    <AssemblyName>AuraFlyout</AssemblyName>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\AuraFlyout.ico</ApplicationIcon>
+    <Platforms>x64;ARM64</Platforms>
+    <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
+    <Version>1.0.0</Version>
+    <Product>AuraFlyout</Product>
+    <Company>AuraFlyout</Company>
+    <Authors>Batuhan Becel</Authors>
+    <Copyright>Copyright © 2026 Batuhan Becel</Copyright>
+    <Description>Media, volume and lock key flyouts plus system status, device battery and speed test widgets for the Windows 11 taskbar</Description>
+    <!-- Windows-only app: platform compatibility warnings are noise here -->
+    <NoWarn>$(NoWarn);CA1416</NoWarn>
+    <!-- a light background app: no background GC thread, a smaller heap, only the two UI languages -->
+    <ConcurrentGarbageCollection>false</ConcurrentGarbageCollection>
+    <TieredPGO>true</TieredPGO>
+    <SatelliteResourceLanguages>en;tr</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="WPF-UI" Version="4.3.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <PackageReference Include="NAudio.Wasapi" Version="2.3.0" />
+    <!-- system status module (ex TaskbarStatus): WMI temperature sensors -->
+    <PackageReference Include="System.Management" Version="10.0.13" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- the GC compacts more eagerly instead of keeping a large heap around -->
+    <RuntimeHostConfigurationOption Include="System.GC.ConserveMemory" Value="5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\AuraFlyout.ico" />
+    <Resource Include="Assets\AuraFlyout.png" />
+    <!-- signed PawnIO modules (LGPL-2.1, see Modules\SystemStatus\PawnIO\COPYING) for the CPU temperature -->
+    <EmbeddedResource Include="Modules\SystemStatus\PawnIO\AMDFamily17.bin" LogicalName="AMDFamily17.bin" />
+    <EmbeddedResource Include="Modules\SystemStatus\PawnIO\IntelMSR.bin" LogicalName="IntelMSR.bin" />
+    <None Include="Modules\SystemStatus\PawnIO\COPYING" CopyToOutputDirectory="PreserveNewest" Link="licenses\PawnIO-modules-COPYING.txt" />
+  </ItemGroup>
+
+</Project>

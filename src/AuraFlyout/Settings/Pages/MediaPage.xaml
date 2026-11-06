@@ -1,0 +1,92 @@
+<UserControl x:Class="AuraFlyout.Settings.Pages.MediaPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:c="clr-namespace:AuraFlyout.Controls">
+    <StackPanel>
+        <TextBlock Style="{StaticResource PageTitle}" Text="{DynamicResource Nav_Media}" />
+
+        <c:SettingCard Icon="MusicNote224" Title="{DynamicResource Media_Enable}" Description="{DynamicResource Media_EnableDesc}">
+            <ui:ToggleSwitch IsChecked="{Binding MediaFlyoutEnabled}" />
+        </c:SettingCard>
+
+        <StackPanel IsEnabled="{Binding MediaFlyoutEnabled}">
+            <c:SettingCard Icon="AlignBottom24" Title="{DynamicResource Common_Position}" Description="{DynamicResource Common_PositionDesc}">
+                <ComboBox SelectedIndex="{Binding MediaFlyoutPosition}" MinWidth="180">
+                    <ComboBoxItem Content="{DynamicResource Pos_BottomCenter}" />
+                    <ComboBoxItem Content="{DynamicResource Pos_BottomLeft}" />
+                    <ComboBoxItem Content="{DynamicResource Pos_BottomRight}" />
+                    <ComboBoxItem Content="{DynamicResource Pos_TopCenter}" />
+                    <ComboBoxItem Content="{DynamicResource Pos_TopLeft}" />
+                    <ComboBoxItem Content="{DynamicResource Pos_TopRight}" />
+                </ComboBox>
+            </c:SettingCard>
+            <c:SettingCard Icon="ArrowUp24" Title="{DynamicResource Media_AboveWidget}" Description="{DynamicResource Media_AboveWidgetDesc}">
+                <ui:ToggleSwitch IsChecked="{Binding MediaFlyoutAboveWidget}" />
+            </c:SettingCard>
+            <c:SettingCard Icon="Timer24" Title="{DynamicResource Common_Duration}" Description="{DynamicResource Common_DurationDesc}">
+                <StackPanel Orientation="Horizontal">
+                    <Slider Minimum="1000" Maximum="10000" TickFrequency="250" IsSnapToTickEnabled="True" Width="180" VerticalAlignment="Center"
+                            Value="{Binding MediaFlyoutDuration}" />
+                    <TextBlock Style="{StaticResource ValueLabel}" Text="{Binding MediaFlyoutDuration, Converter={StaticResource MsToSeconds}}" />
+                </StackPanel>
+            </c:SettingCard>
+            <c:SettingCard Icon="Speaker224" Title="{DynamicResource Media_OnVolumeKeys}" Description="{DynamicResource Media_OnVolumeKeysDesc}">
+                <ui:ToggleSwitch IsChecked="{Binding MediaFlyoutOnVolumeKeys}" />
+            </c:SettingCard>
+
+            <c:SettingExpander Icon="PaintBrush24" Title="{DynamicResource Media_Layout}" Description="{DynamicResource Media_LookDesc}">
+                <StackPanel>
+            <c:SettingCard Icon="ResizeSmall24" Title="{DynamicResource Media_Compact}" Description="{DynamicResource Media_CompactDesc}">
+                <ui:ToggleSwitch IsChecked="{Binding MediaFlyoutCompact}" />
+            </c:SettingCard>
+            <c:SettingCard Icon="PositionForward24" Title="{DynamicResource Media_Seekbar}" Description="{DynamicResource Media_SeekbarDesc}">
+                <ui:ToggleSwitch IsChecked="{Binding MediaFlyoutShowSeekbar}" />
+            </c:SettingCard>
+            <c:SettingCard Icon="ArrowShuffle24" Title="{DynamicResource Media_RepeatShuffle}" Description="{DynamicResource Media_RepeatShuffleDesc}">
+                <ui:ToggleSwitch IsChecked="{Binding MediaFlyoutShowRepeatShuffle}" />
+            </c:SettingCard>
+            <c:SettingCard Icon="AppsList24" Title="{DynamicResource Media_Player}" Description="{DynamicResource Media_PlayerDesc}">
+                <ui:ToggleSwitch IsChecked="{Binding MediaFlyoutShowPlayer}" />
+            </c:SettingCard>
+            <c:SettingCard Icon="Speaker124" Title="{DynamicResource Media_Volume}" Description="{DynamicResource Media_VolumeDesc}">
+                <ui:ToggleSwitch IsChecked="{Binding MediaFlyoutShowVolume}" />
+            </c:SettingCard>
+            <c:SettingCard Icon="TextQuote24" Title="{DynamicResource Media_Lyrics}" Description="{DynamicResource Media_LyricsDesc}">
+                <ui:ToggleSwitch IsChecked="{Binding MediaFlyoutLyrics}" />
+            </c:SettingCard>
+            <c:SettingCard Icon="Sparkle24" Title="{DynamicResource Media_Glow}" Description="{DynamicResource Media_GlowDesc}">
+                <ui:ToggleSwitch IsChecked="{Binding MediaFlyoutCoverGlow}" />
+            </c:SettingCard>
+            <c:SettingCard Icon="DataBarVertical24" Title="{DynamicResource Media_Spectrum}" Description="{DynamicResource Media_SpectrumDesc}">
+                <ui:ToggleSwitch IsChecked="{Binding VisualizerInFlyout}" />
+            </c:SettingCard>
+                </StackPanel>
+            </c:SettingExpander>
+        </StackPanel>
+
+        <c:SettingHeader Text="{DynamicResource Nav_UpNext}" />
+        <c:SettingCard Icon="Next24" Title="{DynamicResource UpNext_Enable}" Description="{DynamicResource UpNext_EnableDesc}">
+            <ui:ToggleSwitch IsChecked="{Binding UpNextEnabled}" />
+        </c:SettingCard>
+        <StackPanel IsEnabled="{Binding UpNextEnabled}">
+            <c:SettingCard Icon="AlignBottom24" Title="{DynamicResource Common_Position}">
+                <ComboBox SelectedIndex="{Binding UpNextPosition}" MinWidth="180">
+                    <ComboBoxItem Content="{DynamicResource Pos_BottomCenter}" />
+                    <ComboBoxItem Content="{DynamicResource Pos_BottomLeft}" />
+                    <ComboBoxItem Content="{DynamicResource Pos_BottomRight}" />
+                    <ComboBoxItem Content="{DynamicResource Pos_TopCenter}" />
+                    <ComboBoxItem Content="{DynamicResource Pos_TopLeft}" />
+                    <ComboBoxItem Content="{DynamicResource Pos_TopRight}" />
+                </ComboBox>
+            </c:SettingCard>
+            <c:SettingCard Icon="Timer24" Title="{DynamicResource Common_Duration}">
+                <StackPanel Orientation="Horizontal">
+                    <Slider Minimum="1000" Maximum="8000" TickFrequency="250" IsSnapToTickEnabled="True" Width="180" VerticalAlignment="Center"
+                            Value="{Binding UpNextDuration}" />
+                    <TextBlock Style="{StaticResource ValueLabel}" Text="{Binding UpNextDuration, Converter={StaticResource MsToSeconds}}" />
+                </StackPanel>
+            </c:SettingCard>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

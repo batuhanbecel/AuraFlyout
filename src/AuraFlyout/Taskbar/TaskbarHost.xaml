@@ -1,0 +1,56 @@
+﻿<dock:DockWindow x:Class="AuraFlyout.Taskbar.TaskbarHost"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        xmlns:c="clr-namespace:AuraFlyout.Controls"
+        xmlns:dock="clr-namespace:AuraFlyout.Taskbar"
+        Title="AuraFlyout Taskbar">
+    <!-- the nearly invisible background keeps the whole area clickable -->
+    <Grid x:Name="Root" Background="#01000000">
+        <StackPanel x:Name="Row" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
+            <c:SpectrumBars x:Name="Bars" Height="22" BarWidth="3" BarGap="2" Margin="6,0,6,0" VerticalAlignment="Center"
+                            BarBrush="{DynamicResource AuraTaskbarForeground}" />
+
+            <Border x:Name="Widget" CornerRadius="4" Padding="8,4" Background="Transparent" Cursor="Hand"
+                    MouseEnter="Widget_MouseEnter" MouseLeave="Widget_MouseLeave"
+                    MouseLeftButtonUp="Widget_Click" MouseDown="Widget_MouseDown" MouseWheel="Widget_MouseWheel">
+                <!-- the visualizer moves in here, after the title, when it sits next to the song -->
+                <StackPanel x:Name="WidgetRow" Orientation="Horizontal">
+                    <Border x:Name="CoverBox" Width="32" Height="32" CornerRadius="4" Margin="0,0,8,0"
+                            Background="{DynamicResource AuraTaskbarHover}">
+                        <Grid>
+                            <TextBlock x:Name="NoteIcon" Style="{StaticResource Glyph}" Text="&#xE8D6;" FontSize="16" Foreground="{DynamicResource AuraTaskbarForeground}" />
+                            <Border CornerRadius="4">
+                                <Border.Background>
+                                    <ImageBrush x:Name="CoverBrush" Stretch="UniformToFill" />
+                                </Border.Background>
+                            </Border>
+                            <Border x:Name="PausedOverlay" CornerRadius="4" Background="#66000000" Visibility="Collapsed">
+                                <TextBlock Style="{StaticResource Glyph}" Text="&#xF8AE;" FontSize="14" Foreground="White" />
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <StackPanel x:Name="TextPanel" VerticalAlignment="Center" MaxWidth="190" Margin="0,0,4,0">
+                        <TextBlock x:Name="TitleText" TextTrimming="CharacterEllipsis"
+                                   Foreground="{DynamicResource AuraTaskbarForeground}" />
+                        <TextBlock x:Name="ArtistText" TextTrimming="CharacterEllipsis"
+                                   Foreground="{DynamicResource AuraTaskbarSecondaryForeground}" />
+                    </StackPanel>
+
+                    <StackPanel x:Name="ControlsPanel" Orientation="Horizontal" VerticalAlignment="Center" Margin="2,0,0,0">
+                        <Button x:Name="PrevButton" Style="{StaticResource TaskbarIconButton}" Click="Prev_Click" ToolTip="{DynamicResource Media_Previous}">
+                            <TextBlock Style="{StaticResource Glyph}" Text="&#xF8AC;" FontSize="13" />
+                        </Button>
+                        <Button x:Name="PlayButton" Style="{StaticResource TaskbarIconButton}" Click="Play_Click" ToolTip="{DynamicResource Media_PlayPause}">
+                            <TextBlock x:Name="PlayIcon" Style="{StaticResource Glyph}" Text="&#xF5B0;" FontSize="16" />
+                        </Button>
+                        <Button x:Name="NextButton" Style="{StaticResource TaskbarIconButton}" Click="Next_Click" ToolTip="{DynamicResource Media_Next}">
+                            <TextBlock Style="{StaticResource Glyph}" Text="&#xF8AD;" FontSize="13" />
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </Grid>
+</dock:DockWindow>

@@ -1,0 +1,43 @@
+<UserControl x:Class="AuraFlyout.Settings.Pages.FilterPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:c="clr-namespace:AuraFlyout.Controls">
+    <StackPanel>
+        <TextBlock Style="{StaticResource PageTitle}" Text="{DynamicResource Nav_Filter}" />
+        <TextBlock Text="{DynamicResource Filter_Intro}" TextWrapping="Wrap" Margin="0,0,0,12"
+                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+
+        <c:SettingHeader Text="{DynamicResource Filter_Active}" Margin="0,4,0,8" />
+        <ItemsControl x:Name="ActiveList">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <c:SettingCard Icon="AppsList24" Title="{Binding Name}" Description="{Binding Id}">
+                        <ui:Button Content="{DynamicResource Filter_Exclude}" Icon="{ui:SymbolIcon Prohibited24}" Tag="{Binding Id}" Click="Exclude_Click" />
+                    </c:SettingCard>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <TextBlock x:Name="NoActive" Text="{DynamicResource Filter_NoActive}" Margin="4,0,0,8"
+                   Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+
+        <c:SettingHeader Text="{DynamicResource Filter_Excluded}" />
+        <Grid Margin="0,0,0,8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <ui:TextBox x:Name="NewApp" PlaceholderText="{DynamicResource Filter_Placeholder}" KeyDown="NewApp_KeyDown" />
+            <ui:Button Grid.Column="1" Margin="8,0,0,0" Appearance="Primary" Icon="{ui:SymbolIcon Add24}" Content="{DynamicResource Filter_Add}" Click="Add_Click" />
+        </Grid>
+        <ItemsControl ItemsSource="{Binding ExcludedApps}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <c:SettingCard Icon="Prohibited24" Title="{Binding}">
+                        <ui:Button Content="{DynamicResource Filter_Remove}" Icon="{ui:SymbolIcon Delete24}" Tag="{Binding}" Click="Remove_Click" />
+                    </c:SettingCard>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </StackPanel>
+</UserControl>

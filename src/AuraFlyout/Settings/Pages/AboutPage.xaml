@@ -1,0 +1,181 @@
+<UserControl x:Class="AuraFlyout.Settings.Pages.AboutPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:c="clr-namespace:AuraFlyout.Controls">
+    <UserControl.Resources>
+        <!-- a feature tile: what it does, a click away from its page -->
+        <Style x:Key="FeatureTile" TargetType="ui:CardAction" BasedOn="{StaticResource {x:Type ui:CardAction}}">
+            <Setter Property="Margin" Value="0,0,8,8" />
+            <Setter Property="Padding" Value="16,14" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        </Style>
+        <!-- a highlight: a quality of the whole app, not a page -->
+        <Style x:Key="HighlightTile" TargetType="Border">
+            <Setter Property="Margin" Value="0,0,8,8" />
+            <Setter Property="Padding" Value="16,14" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorDefaultBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+        </Style>
+        <Style x:Key="HighlightIcon" TargetType="ui:SymbolIcon">
+            <Setter Property="FontSize" Value="22" />
+            <Setter Property="Margin" Value="0,0,0,8" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="Foreground" Value="{DynamicResource AccentTextFillColorPrimaryBrush}" />
+        </Style>
+        <Style x:Key="FeatureTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+        </Style>
+        <Style x:Key="FeatureText" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Margin" Value="0,2,0,0" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+        </Style>
+    </UserControl.Resources>
+
+    <StackPanel>
+        <TextBlock Style="{StaticResource PageTitle}" Text="{DynamicResource Nav_About}" />
+
+        <!-- the app: its icon in its own colours, the version and the update check -->
+        <Border CornerRadius="8" Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="1">
+            <Border CornerRadius="7" Padding="24,22">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#2EB15CF8" Offset="0" />
+                        <GradientStop Color="#146D5EF5" Offset="0.5" />
+                        <GradientStop Color="#0519C6E6" Offset="1" />
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Image Source="{StaticResource AppIcon}" Width="96" Height="96" Margin="0,0,22,0" VerticalAlignment="Center" />
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <TextBlock Text="AuraFlyout" FontSize="26" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                        <TextBlock Text="{DynamicResource About_Tagline}" FontSize="14" TextWrapping="Wrap" Margin="0,2,0,0"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        <WrapPanel Margin="0,10,0,0">
+                            <Border CornerRadius="4" Padding="8,3" Margin="0,0,8,6" Background="{DynamicResource ControlFillColorSecondaryBrush}">
+                                <TextBlock x:Name="VersionText" FontSize="12" Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                            </Border>
+                            <Border CornerRadius="4" Padding="8,3" Margin="0,0,8,6" Background="{DynamicResource AccentFillColorDefaultBrush}">
+                                <TextBlock Text="{DynamicResource About_Edition}" FontSize="12" Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}" />
+                            </Border>
+                        </WrapPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                            <ui:Button x:Name="UpdateButton" Icon="{ui:SymbolIcon ArrowSync24}" Content="{DynamicResource About_CheckUpdates}" Click="Update_Click" />
+                            <TextBlock x:Name="UpdateState" VerticalAlignment="Center" Margin="12,0,0,0" TextTrimming="CharacterEllipsis"
+                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Border>
+
+        <c:SettingHeader Text="{DynamicResource About_Highlights}" />
+        <UniformGrid Columns="2" Margin="0,0,-8,-8">
+            <Border Style="{StaticResource HighlightTile}">
+                <StackPanel>
+                    <ui:SymbolIcon Symbol="Flash24" Style="{StaticResource HighlightIcon}" />
+                    <TextBlock Style="{StaticResource FeatureTitle}" Text="{DynamicResource About_HlMotion}" />
+                    <TextBlock Style="{StaticResource FeatureText}" Text="{DynamicResource About_HlMotionDesc}" />
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource HighlightTile}">
+                <StackPanel>
+                    <ui:SymbolIcon Symbol="DarkTheme24" Style="{StaticResource HighlightIcon}" />
+                    <TextBlock Style="{StaticResource FeatureTitle}" Text="{DynamicResource About_HlTheme}" />
+                    <TextBlock Style="{StaticResource FeatureText}" Text="{DynamicResource About_HlThemeDesc}" />
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource HighlightTile}">
+                <StackPanel>
+                    <ui:SymbolIcon Symbol="WindowApps24" Style="{StaticResource HighlightIcon}" />
+                    <TextBlock Style="{StaticResource FeatureTitle}" Text="{DynamicResource About_HlNative}" />
+                    <TextBlock Style="{StaticResource FeatureText}" Text="{DynamicResource About_HlNativeDesc}" />
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource HighlightTile}">
+                <StackPanel>
+                    <ui:SymbolIcon Symbol="LeafTwo24" Style="{StaticResource HighlightIcon}" />
+                    <TextBlock Style="{StaticResource FeatureTitle}" Text="{DynamicResource About_HlLight}" />
+                    <TextBlock Style="{StaticResource FeatureText}" Text="{DynamicResource About_HlLightDesc}" />
+                </StackPanel>
+            </Border>
+        </UniformGrid>
+
+        <!-- everything it does, by the groups of the navigation -->
+        <c:SettingHeader Text="{DynamicResource About_Features}" />
+        <UniformGrid Columns="2" Margin="0,0,-8,-8">
+            <ui:CardAction Style="{StaticResource FeatureTile}" Icon="{ui:SymbolIcon MusicNote224}" Tag="Nav_Media" Click="Feature_Click">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource FeatureTitle}" Text="{DynamicResource Nav_GroupMedia}" />
+                    <TextBlock Style="{StaticResource FeatureText}" Text="{DynamicResource About_MediaDesc}" />
+                </StackPanel>
+            </ui:CardAction>
+            <ui:CardAction Style="{StaticResource FeatureTile}" Icon="{ui:SymbolIcon Speaker224}" Tag="Nav_Volume" Click="Feature_Click">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource FeatureTitle}" Text="{DynamicResource Nav_GroupFlyouts}" />
+                    <TextBlock Style="{StaticResource FeatureText}" Text="{DynamicResource About_IndicatorsDesc}" />
+                </StackPanel>
+            </ui:CardAction>
+            <ui:CardAction Style="{StaticResource FeatureTile}" Icon="{ui:SymbolIcon DesktopPulse24}" Tag="Nav_Status" Click="Feature_Click">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource FeatureTitle}" Text="{DynamicResource Nav_Status}" />
+                    <TextBlock Style="{StaticResource FeatureText}" Text="{DynamicResource About_StatusDesc}" />
+                </StackPanel>
+            </ui:CardAction>
+            <ui:CardAction Style="{StaticResource FeatureTile}" Icon="{ui:SymbolIcon Battery524}" Tag="Nav_Logi" Click="Feature_Click">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource FeatureTitle}" Text="{DynamicResource Nav_Logi}" />
+                    <TextBlock Style="{StaticResource FeatureText}" Text="{DynamicResource About_BatteryDesc}" />
+                </StackPanel>
+            </ui:CardAction>
+            <ui:CardAction Style="{StaticResource FeatureTile}" Icon="{ui:SymbolIcon TopSpeed24}" Tag="Nav_Speed" Click="Feature_Click">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource FeatureTitle}" Text="{DynamicResource Nav_Speed}" />
+                    <TextBlock Style="{StaticResource FeatureText}" Text="{DynamicResource About_SpeedDesc}" />
+                </StackPanel>
+            </ui:CardAction>
+            <ui:CardAction Style="{StaticResource FeatureTile}" Icon="{ui:SymbolIcon Games24}" Tag="Nav_Overlay" Click="Feature_Click">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource FeatureTitle}" Text="{DynamicResource Nav_Overlay}" />
+                    <TextBlock Style="{StaticResource FeatureText}" Text="{DynamicResource About_OverlayDesc}" />
+                </StackPanel>
+            </ui:CardAction>
+            <ui:CardAction Style="{StaticResource FeatureTile}" Icon="{ui:SymbolIcon TabDesktopMultipleBottom24}" Tag="Nav_Layout" Click="Feature_Click">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource FeatureTitle}" Text="{DynamicResource Nav_Layout}" />
+                    <TextBlock Style="{StaticResource FeatureText}" Text="{DynamicResource About_LayoutDesc}" />
+                </StackPanel>
+            </ui:CardAction>
+            <ui:CardAction Style="{StaticResource FeatureTile}" Icon="{ui:SymbolIcon Keyboard24}" Tag="Nav_Hotkeys" Click="Feature_Click">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource FeatureTitle}" Text="{DynamicResource About_General}" />
+                    <TextBlock Style="{StaticResource FeatureText}" Text="{DynamicResource About_GeneralDesc}" />
+                </StackPanel>
+            </ui:CardAction>
+        </UniformGrid>
+
+        <c:SettingHeader Text="{DynamicResource About_Credits}" />
+        <Border CornerRadius="8" Padding="16,14" Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="1">
+            <TextBlock Text="{DynamicResource About_CreditsText}" TextWrapping="Wrap" LineHeight="21"
+                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+        </Border>
+
+        <c:SettingHeader Text="{DynamicResource About_Data}" />
+        <c:SettingCard x:Name="DataCard" Icon="Folder24" Title="{DynamicResource About_DataTitle}">
+            <ui:Button Icon="{ui:SymbolIcon FolderOpen24}" Content="{DynamicResource About_OpenFolder}" Click="OpenFolder_Click" />
+        </c:SettingCard>
+    </StackPanel>
+</UserControl>

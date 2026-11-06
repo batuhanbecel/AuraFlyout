@@ -1,0 +1,76 @@
+<UserControl x:Class="AuraFlyout.Settings.Pages.HomePage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:c="clr-namespace:AuraFlyout.Controls">
+    <StackPanel>
+        <!-- header card, like the device card on top of Windows Settings › System -->
+        <Border CornerRadius="8" Padding="20" Margin="0,0,0,8" Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Image Source="{StaticResource AppIcon}" Width="64" Height="64" Margin="0,0,18,0" />
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock Text="AuraFlyout" FontSize="20" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                    <TextBlock Text="{DynamicResource Home_Tagline}" FontSize="14" TextWrapping="Wrap" Margin="0,2,0,0"
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- the standalone taskbar apps are part of AuraFlyout now -->
+        <ui:InfoBar x:Name="LegacyBar" Title="{DynamicResource Home_LegacyTitle}" IsOpen="False" IsClosable="True" Severity="Warning" Margin="0,8,0,0">
+            <ui:InfoBar.Content>
+                <StackPanel>
+                    <TextBlock x:Name="LegacyText" TextWrapping="Wrap" Margin="0,0,0,8" />
+                    <ui:Button Appearance="Primary" Content="{DynamicResource Home_LegacyButton}" Icon="{ui:SymbolIcon Dismiss24}" Click="Retire_Click" />
+                </StackPanel>
+            </ui:InfoBar.Content>
+        </ui:InfoBar>
+
+        <c:SettingHeader Text="{DynamicResource Home_Quick}" />
+        <c:SettingCard Icon="DesktopPulse24" Title="{DynamicResource Status_Enable}" Description="{DynamicResource Status_EnableDesc}">
+            <ui:ToggleSwitch IsChecked="{Binding StatusEnabled}" />
+        </c:SettingCard>
+        <c:SettingCard Icon="Battery524" Title="{DynamicResource Logi_Enable}" Description="{DynamicResource Logi_EnableDesc}">
+            <ui:ToggleSwitch IsChecked="{Binding LogiEnabled}" />
+        </c:SettingCard>
+        <c:SettingCard Icon="TopSpeed24" Title="{DynamicResource Speed_Enable}" Description="{DynamicResource Speed_EnableDesc}">
+            <ui:ToggleSwitch IsChecked="{Binding SpeedEnabled}" />
+        </c:SettingCard>
+        <c:SettingCard Icon="MusicNote224" Title="{DynamicResource Media_Enable}" Description="{DynamicResource Media_EnableDesc}">
+            <ui:ToggleSwitch IsChecked="{Binding MediaFlyoutEnabled}" />
+        </c:SettingCard>
+        <c:SettingCard Icon="Next24" Title="{DynamicResource UpNext_Enable}" Description="{DynamicResource UpNext_EnableDesc}">
+            <ui:ToggleSwitch IsChecked="{Binding UpNextEnabled}" />
+        </c:SettingCard>
+        <c:SettingCard Icon="Speaker224" Title="{DynamicResource Volume_Enable}" Description="{DynamicResource Volume_EnableDesc}">
+            <ui:ToggleSwitch IsChecked="{Binding VolumeFlyoutEnabled}" />
+        </c:SettingCard>
+        <c:SettingCard Icon="Keyboard24" Title="{DynamicResource Lock_Enable}" Description="{DynamicResource Lock_EnableDesc}">
+            <ui:ToggleSwitch IsChecked="{Binding LockKeysEnabled}" />
+        </c:SettingCard>
+        <c:SettingCard Icon="TabDesktopBottom24" Title="{DynamicResource Taskbar_Enable}" Description="{DynamicResource Taskbar_EnableDesc}">
+            <ui:ToggleSwitch IsChecked="{Binding TaskbarWidgetEnabled}" />
+        </c:SettingCard>
+        <c:SettingCard Icon="DataBarVertical24" Title="{DynamicResource Vis_Enable}" Description="{DynamicResource Vis_EnableDesc}">
+            <ui:ToggleSwitch IsChecked="{Binding VisualizerEnabled}" />
+        </c:SettingCard>
+        <c:SettingCard Icon="Rocket24" Title="{DynamicResource System_Startup}" Description="{DynamicResource System_StartupDesc}">
+            <ui:ToggleSwitch x:Name="StartupSwitch" Click="Startup_Click" />
+        </c:SettingCard>
+
+        <c:SettingHeader Text="{DynamicResource Home_Try}" />
+        <WrapPanel>
+            <ui:Button Appearance="Primary" Margin="0,0,8,8" Click="TestMedia_Click" Icon="{ui:SymbolIcon Play24}" Content="{DynamicResource Home_TestMedia}" />
+            <ui:Button Margin="0,0,8,8" Click="TestVolume_Click" Icon="{ui:SymbolIcon Speaker224}" Content="{DynamicResource Home_TestVolume}" />
+            <ui:Button Margin="0,0,8,8" Click="TestLock_Click" Icon="{ui:SymbolIcon LockClosed24}" Content="{DynamicResource Home_TestLock}" />
+            <ui:Button Margin="0,0,8,8" Click="TestUpNext_Click" Icon="{ui:SymbolIcon Next24}" Content="{DynamicResource Home_TestUpNext}" />
+        </WrapPanel>
+        <TextBlock Text="{DynamicResource Home_Hint}" TextWrapping="Wrap" FontSize="12" Margin="0,8,0,0"
+                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+    </StackPanel>
+</UserControl>

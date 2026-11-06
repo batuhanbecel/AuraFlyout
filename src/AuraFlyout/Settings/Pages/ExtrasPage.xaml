@@ -1,0 +1,35 @@
+<UserControl x:Class="AuraFlyout.Settings.Pages.ExtrasPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:c="clr-namespace:AuraFlyout.Controls">
+    <StackPanel>
+        <TextBlock Style="{StaticResource PageTitle}" Text="{DynamicResource Nav_Extras}" />
+
+        <c:SettingHeader Text="{DynamicResource Bright_Header}" Margin="0,0,0,8" />
+        <c:SettingCard Icon="BrightnessHigh24" Title="{DynamicResource Bright_Enable}" Description="{DynamicResource Bright_EnableDesc}">
+            <ui:ToggleSwitch IsChecked="{Binding BrightnessFlyoutEnabled}" />
+        </c:SettingCard>
+        <WrapPanel Margin="0,4,0,0">
+            <ui:Button Margin="0,0,8,8" Icon="{ui:SymbolIcon BrightnessHigh24}" Content="{DynamicResource Bright_Open}" Click="Brightness_Click" />
+        </WrapPanel>
+
+        <c:SettingHeader Text="{DynamicResource Mic_Header}" />
+        <c:SettingCard Icon="MicOff24" Title="{DynamicResource Mic_Indicator}" Description="{DynamicResource Mic_IndicatorDesc}">
+            <ui:ToggleSwitch IsChecked="{Binding MicTaskbarIndicator}" />
+        </c:SettingCard>
+        <c:SettingCard Icon="Mic24" Title="{DynamicResource Mic_Device}">
+            <TextBlock x:Name="MicName" VerticalAlignment="Center" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+        </c:SettingCard>
+        <WrapPanel Margin="0,4,0,0">
+            <ui:Button Margin="0,0,8,8" Icon="{ui:SymbolIcon Mic24}" Content="{DynamicResource Mic_Toggle}" Click="Mic_Click" />
+        </WrapPanel>
+
+        <c:SettingHeader Text="{DynamicResource Layout_Header}" />
+        <c:SettingCard Icon="LocalLanguage24" Title="{DynamicResource Layout_FlyoutEnable}" Description="{DynamicResource Layout_FlyoutDesc}">
+            <ui:ToggleSwitch IsChecked="{Binding LayoutFlyoutEnabled}" />
+        </c:SettingCard>
+
+        <TextBlock Text="{DynamicResource Extras_Hotkeys}" TextWrapping="Wrap" FontSize="12" Margin="2,12,0,0" Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+    </StackPanel>
+</UserControl>

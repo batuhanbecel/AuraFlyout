@@ -1,0 +1,162 @@
+﻿<local:FlyoutWindow x:Class="AuraFlyout.Flyouts.MediaFlyout"
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                    xmlns:local="clr-namespace:AuraFlyout.Flyouts"
+                    xmlns:core="clr-namespace:AuraFlyout.Core"
+                    xmlns:app="clr-namespace:AuraFlyout"
+                    xmlns:c="clr-namespace:AuraFlyout.Controls"
+                    Title="AuraFlyout Media">
+    <Border x:Name="Root" CornerRadius="8" Width="368" Padding="14,12,14,12">
+        <Grid>
+            <!-- blurred cover glow behind everything -->
+            <Grid x:Name="GlowHost" Margin="-14,-12,-14,-12" IsHitTestVisible="False"
+                  Visibility="{Binding MediaFlyoutCoverGlow, Source={x:Static core:SettingsStore.Current}, Converter={StaticResource BoolToVis}}">
+                <!-- a Border has no size of its own, so the glow never makes the flyout taller -->
+                <Border Opacity="0.32" Margin="-40">
+                    <Border.Background>
+                        <ImageBrush ImageSource="{Binding Cover}" Stretch="UniformToFill" />
+                    </Border.Background>
+                    <Border.Effect>
+                        <BlurEffect Radius="60" KernelType="Gaussian" RenderingBias="Performance" />
+                    </Border.Effect>
+                </Border>
+            </Grid>
+
+            <StackPanel>
+                <!-- player row -->
+                <Grid x:Name="PlayerRow" Margin="0,0,0,10"
+                      Visibility="{Binding MediaFlyoutShowPlayer, Source={x:Static core:SettingsStore.Current}, Converter={StaticResource BoolToVis}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Image Source="{Binding AppIcon}" Width="16" Height="16" Margin="0,0,8,0" VerticalAlignment="Center"
+                           Visibility="{Binding AppIcon, Converter={StaticResource NullToVis}}" RenderOptions.BitmapScalingMode="HighQuality" />
+                    <TextBlock Grid.Column="1" Text="{Binding AppName}" FontSize="12" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    <StackPanel Grid.Column="2" Orientation="Horizontal">
+                        <Button Style="{StaticResource AuraIconButton}" Width="28" Height="24" Click="SwitchSession_Click"
+                                ToolTip="{DynamicResource Media_SwitchPlayer}"
+                                Visibility="{Binding HasMultipleSessions, Converter={StaticResource BoolToVis}}">
+                            <TextBlock Style="{StaticResource Glyph}" Text="&#xE8AB;" FontSize="14" />
+                        </Button>
+                        <Button Style="{StaticResource AuraIconButton}" Width="28" Height="24" Click="OpenPlayer_Click"
+                                ToolTip="{DynamicResource Media_OpenPlayer}">
+                            <TextBlock Style="{StaticResource Glyph}" Text="&#xE8A7;" FontSize="14" />
+                        </Button>
+                    </StackPanel>
+                </Grid>
+
+                <!-- cover + text + controls -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Border x:Name="CoverBorder" Width="84" Height="84" CornerRadius="6" Margin="0,0,14,0" Cursor="Hand"
+                            MouseLeftButtonUp="Cover_Click" Background="{DynamicResource SubtleFillColorSecondaryBrush}">
+                        <Grid>
+                            <TextBlock Style="{StaticResource Glyph}" Text="&#xE8D6;" FontSize="30" Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                           Visibility="{Binding Cover, Converter={StaticResource NullToVis}, ConverterParameter=Invert}" />
+                            <Border CornerRadius="6" ClipToBounds="True">
+                                <Border.Background>
+                                    <ImageBrush ImageSource="{Binding Cover}" Stretch="UniformToFill" />
+                                </Border.Background>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Title}" FontSize="14" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"
+                                   Foreground="{DynamicResource TextFillColorPrimaryBrush}" ToolTip="{Binding Title}" />
+                        <TextBlock Text="{Binding Artist}" FontSize="12" TextTrimming="CharacterEllipsis" Margin="0,1,0,6"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" ToolTip="{Binding Artist}" />
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="-6,0,0,0">
+                            <Button x:Name="ShuffleButton" Style="{StaticResource AuraIconButton}" Click="Shuffle_Click"
+                                    IsEnabled="{Binding CanShuffle}" ToolTip="{DynamicResource Media_Shuffle}"
+                                    Opacity="{Binding IsShuffle, Converter={StaticResource BoolToOpacity}}"
+                                    Visibility="{Binding MediaFlyoutShowRepeatShuffle, Source={x:Static core:SettingsStore.Current}, Converter={StaticResource BoolToVis}}">
+                                <TextBlock Style="{StaticResource Glyph}" Text="&#xE8B1;" FontSize="16" />
+                            </Button>
+                            <Button Style="{StaticResource AuraIconButton}" Click="Previous_Click" IsEnabled="{Binding CanPrevious}"
+                                    ToolTip="{DynamicResource Media_Previous}">
+                                <TextBlock Style="{StaticResource Glyph}" Text="&#xF8AC;" FontSize="16" />
+                            </Button>
+                            <Button Style="{StaticResource AuraPlayButton}" Click="PlayPause_Click" IsEnabled="{Binding CanPlayPause}" Margin="4,0" ToolTip="{DynamicResource Media_PlayPause}">
+                                <TextBlock x:Name="PlayIcon" Style="{StaticResource Glyph}" Text="&#xF5B0;" FontSize="18" />
+                            </Button>
+                            <Button Style="{StaticResource AuraIconButton}" Click="Next_Click" IsEnabled="{Binding CanNext}"
+                                    ToolTip="{DynamicResource Media_Next}">
+                                <TextBlock Style="{StaticResource Glyph}" Text="&#xF8AD;" FontSize="16" />
+                            </Button>
+                            <Button x:Name="RepeatButton" Style="{StaticResource AuraIconButton}" Click="Repeat_Click"
+                                    IsEnabled="{Binding CanRepeat}" ToolTip="{DynamicResource Media_Repeat}"
+                                    Visibility="{Binding MediaFlyoutShowRepeatShuffle, Source={x:Static core:SettingsStore.Current}, Converter={StaticResource BoolToVis}}">
+                                <TextBlock Style="{StaticResource Glyph}" Text="{Binding RepeatMode, Converter={StaticResource RepeatIcon}}" Opacity="{Binding RepeatMode, Converter={StaticResource RepeatOpacity}}" FontSize="16" />
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+
+                <!-- time-synced lyrics (LRCLIB): the line being sung and the next one -->
+                <StackPanel x:Name="LyricsRow" Margin="2,10,2,0" Visibility="Collapsed">
+                    <TextBlock x:Name="LyricNow" FontSize="14" FontWeight="SemiBold" TextWrapping="Wrap" MaxHeight="40" TextTrimming="CharacterEllipsis"
+                               Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                    <TextBlock x:Name="LyricNext" FontSize="12" TextTrimming="CharacterEllipsis" Margin="0,2,0,0"
+                               Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                </StackPanel>
+
+                <!-- seek bar -->
+                <Grid x:Name="SeekRow" Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="PositionText" Text="0:00" FontSize="12" MinWidth="34" VerticalAlignment="Center"
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    <Slider x:Name="SeekSlider" Grid.Column="1" Minimum="0" Maximum="1" Margin="6,0" VerticalAlignment="Center"
+                            IsMoveToPointEnabled="True" Focusable="False" IsEnabled="{Binding CanSeek}"
+                            Thumb.DragStarted="Seek_DragStarted" Thumb.DragCompleted="Seek_DragCompleted"
+                            />
+                    <!-- press / release: hooked in code (the slider marks the press as handled) -->
+                    <TextBlock Grid.Column="2" Text="{Binding Duration, Converter={StaticResource Time}}" FontSize="12" MinWidth="34"
+                               TextAlignment="Right" VerticalAlignment="Center" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                </Grid>
+
+                <!-- volume -->
+                <Grid x:Name="VolumeRow" Margin="0,4,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Button Style="{StaticResource AuraIconButton}" Width="32" Height="30" Click="Mute_Click" Margin="-6,0,0,0" ToolTip="{DynamicResource Volume_Mute}"
+                            DataContext="{x:Static app:App.Audio}">
+                        <TextBlock Style="{StaticResource Glyph}" FontSize="16">
+                            <TextBlock.Text>
+                                <MultiBinding Converter="{StaticResource VolumeIcon}">
+                                    <Binding Path="Volume" />
+                                    <Binding Path="IsMuted" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </Button>
+                    <Slider Grid.Column="1" Minimum="0" Maximum="100" Margin="2,0,6,0" VerticalAlignment="Center" Focusable="False"
+                            IsMoveToPointEnabled="True" DataContext="{x:Static app:App.Audio}"
+                            Value="{Binding Volume, Mode=TwoWay}" ValueChanged="AnySlider_ValueChanged" />
+                    <TextBlock Grid.Column="2" DataContext="{x:Static app:App.Audio}" Text="{Binding Volume, Converter={StaticResource Percent}}"
+                               FontSize="12" MinWidth="34" TextAlignment="Right" VerticalAlignment="Center"
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                </Grid>
+
+                <!-- mini spectrum -->
+                <c:SpectrumBars x:Name="FlyoutSpectrum" Height="18" Margin="0,8,0,0" BarWidth="4" BarGap="3" Centered="False"
+                                Visibility="Collapsed" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</local:FlyoutWindow>

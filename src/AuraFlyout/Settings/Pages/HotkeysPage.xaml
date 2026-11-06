@@ -1,0 +1,12 @@
+<UserControl x:Class="AuraFlyout.Settings.Pages.HotkeysPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:c="clr-namespace:AuraFlyout.Controls">
+    <StackPanel>
+        <TextBlock Style="{StaticResource PageTitle}" Text="{DynamicResource Nav_Hotkeys}" />
+        <TextBlock Text="{DynamicResource Hotkey_Intro}" TextWrapping="Wrap" Margin="0,-8,0,16" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+        <StackPanel x:Name="List" />
+        <ui:Button Margin="0,8,0,0" Icon="{ui:SymbolIcon ArrowReset24}" Content="{DynamicResource Hotkey_ResetAll}" Click="ResetAll_Click" />
+    </StackPanel>
+</UserControl>

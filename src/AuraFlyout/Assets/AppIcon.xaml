@@ -1,0 +1,184 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--
+        The app icon, as vectors: the one source for the in-app logo and for Assets\AuraFlyout.ico / .png
+        (Assets\render-icon.ps1 renders them from this file).
+
+        Three flyouts fanned out like cards (media, sound, system: one app for all of them), the front one
+        with live level bars, the visualizer's look. 256 x 256 design grid; AppIconSmall is the same picture
+        with fewer details for 16 - 40 px.
+    -->
+
+    <DrawingImage x:Key="AppIcon">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <GeometryDrawing Brush="Transparent" Geometry="M0,0 H256 V256 H0 Z" />
+
+                <!-- back card -->
+                <GeometryDrawing>
+                    <GeometryDrawing.Brush>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#FF5EEAD4" Offset="0" />
+                            <GradientStop Color="#FF06B6D4" Offset="1" />
+                        </LinearGradientBrush>
+                    </GeometryDrawing.Brush>
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="30,46,156,116" RadiusX="32" RadiusY="32">
+                            <RectangleGeometry.Transform>
+                                <RotateTransform Angle="-18" CenterX="108" CenterY="104" />
+                            </RectangleGeometry.Transform>
+                        </RectangleGeometry>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+
+                <!-- the middle card's shadow on the back one, then the middle card -->
+                <GeometryDrawing Brush="#260B1A4A">
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="45,76,170,128" RadiusX="36" RadiusY="36">
+                            <RectangleGeometry.Transform>
+                                <RotateTransform Angle="-9" CenterX="130" CenterY="140" />
+                            </RectangleGeometry.Transform>
+                        </RectangleGeometry>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Brush>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#FF7DD3FC" Offset="0" />
+                            <GradientStop Color="#FF3B82F6" Offset="1" />
+                        </LinearGradientBrush>
+                    </GeometryDrawing.Brush>
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="47,72,166,124" RadiusX="34" RadiusY="34">
+                            <RectangleGeometry.Transform>
+                                <RotateTransform Angle="-9" CenterX="130" CenterY="134" />
+                            </RectangleGeometry.Transform>
+                        </RectangleGeometry>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+
+                <!-- the front card's shadow, straight below it: faint layers for a soft edge -->
+                <GeometryDrawing Brush="#140B1A4A">
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="68,104,168,132" RadiusX="36" RadiusY="36" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <GeometryDrawing Brush="#1A0B1A4A">
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="66,102,172,131" RadiusX="36" RadiusY="36" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+
+                <!-- front card -->
+                <GeometryDrawing>
+                    <GeometryDrawing.Brush>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#FFD08CFF" Offset="0" />
+                            <GradientStop Color="#FF9B5CF6" Offset="0.5" />
+                            <GradientStop Color="#FF6366F1" Offset="1" />
+                        </LinearGradientBrush>
+                    </GeometryDrawing.Brush>
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="64,98,176,132" RadiusX="36" RadiusY="36" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <!-- light from above, and the lit rim -->
+                <GeometryDrawing>
+                    <GeometryDrawing.Brush>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <GradientStop Color="#33FFFFFF" Offset="0" />
+                            <GradientStop Color="#00FFFFFF" Offset="0.55" />
+                        </LinearGradientBrush>
+                    </GeometryDrawing.Brush>
+                    <GeometryDrawing.Pen>
+                        <Pen Thickness="2">
+                            <Pen.Brush>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                    <GradientStop Color="#73FFFFFF" Offset="0" />
+                                    <GradientStop Color="#00FFFFFF" Offset="0.7" />
+                                </LinearGradientBrush>
+                            </Pen.Brush>
+                        </Pen>
+                    </GeometryDrawing.Pen>
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="65,99,174,130" RadiusX="35" RadiusY="35" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+
+                <!-- level bars, grown from the middle like the visualizer -->
+                <GeometryDrawing Brush="#26300A6E">
+                    <GeometryDrawing.Geometry>
+                        <GeometryGroup>
+                            <RectangleGeometry Rect="97,150,14,34" RadiusX="7" RadiusY="7" />
+                            <RectangleGeometry Rect="121,131,14,72" RadiusX="7" RadiusY="7" />
+                            <RectangleGeometry Rect="145,119,14,96" RadiusX="7" RadiusY="7" />
+                            <RectangleGeometry Rect="169,138,14,58" RadiusX="7" RadiusY="7" />
+                            <RectangleGeometry Rect="193,153,14,28" RadiusX="7" RadiusY="7" />
+                        </GeometryGroup>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <GeometryDrawing Brush="#FFFFFFFF">
+                    <GeometryDrawing.Geometry>
+                        <GeometryGroup>
+                            <RectangleGeometry Rect="97,147,14,34" RadiusX="7" RadiusY="7" />
+                            <RectangleGeometry Rect="121,128,14,72" RadiusX="7" RadiusY="7" />
+                            <RectangleGeometry Rect="145,116,14,96" RadiusX="7" RadiusY="7" />
+                            <RectangleGeometry Rect="169,135,14,58" RadiusX="7" RadiusY="7" />
+                            <RectangleGeometry Rect="193,150,14,28" RadiusX="7" RadiusY="7" />
+                        </GeometryGroup>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <!-- 16 - 40 px: two cards, three bars, no shadows or rim -->
+    <DrawingImage x:Key="AppIconSmall">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <GeometryDrawing Brush="Transparent" Geometry="M0,0 H256 V256 H0 Z" />
+                <GeometryDrawing>
+                    <GeometryDrawing.Brush>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#FF5EEAD4" Offset="0" />
+                            <GradientStop Color="#FF3B82F6" Offset="1" />
+                        </LinearGradientBrush>
+                    </GeometryDrawing.Brush>
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="18,40,176,132" RadiusX="38" RadiusY="38">
+                            <RectangleGeometry.Transform>
+                                <RotateTransform Angle="-14" CenterX="106" CenterY="106" />
+                            </RectangleGeometry.Transform>
+                        </RectangleGeometry>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <GeometryDrawing Brush="#330B1A4A">
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="44,96,204,152" RadiusX="42" RadiusY="42" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Brush>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#FFD08CFF" Offset="0" />
+                            <GradientStop Color="#FF9B5CF6" Offset="0.5" />
+                            <GradientStop Color="#FF6366F1" Offset="1" />
+                        </LinearGradientBrush>
+                    </GeometryDrawing.Brush>
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="48,92,200,148" RadiusX="40" RadiusY="40" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <GeometryDrawing Brush="#FFFFFFFF">
+                    <GeometryDrawing.Geometry>
+                        <GeometryGroup>
+                            <RectangleGeometry Rect="96,136,24,64" RadiusX="12" RadiusY="12" />
+                            <RectangleGeometry Rect="136,116,24,104" RadiusX="12" RadiusY="12" />
+                            <RectangleGeometry Rect="176,144,24,48" RadiusX="12" RadiusY="12" />
+                        </GeometryGroup>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+</ResourceDictionary>

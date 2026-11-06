@@ -1,0 +1,22 @@
+<local:FlyoutWindow x:Class="AuraFlyout.Flyouts.NotificationToast"
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:AuraFlyout.Flyouts"
+                    Title="AuraFlyout Notification">
+    <Border x:Name="Root" CornerRadius="8" Width="340" Padding="14,12" MouseLeftButtonUp="Root_Click" Cursor="Hand">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Border x:Name="IconBack" Width="40" Height="40" CornerRadius="20" Margin="0,0,12,0" Background="{DynamicResource SubtleFillColorSecondaryBrush}">
+                <TextBlock x:Name="GlyphText" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="20" HorizontalAlignment="Center"
+                           VerticalAlignment="Center" Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+            </Border>
+            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                <TextBlock x:Name="TitleText" FontSize="14" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                <TextBlock x:Name="BodyText" FontSize="12" TextWrapping="Wrap" Margin="0,2,0,0" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</local:FlyoutWindow>
