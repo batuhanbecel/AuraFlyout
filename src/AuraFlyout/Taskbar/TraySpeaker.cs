@@ -34,6 +34,7 @@ public sealed class TraySpeaker : IDisposable
     private bool _swallowUp;   // hook thread only
     private int _wheel;        // hook thread only: wheel delta not yet turned into steps
     private AutomationElement? _element; // refresh only
+    private long _nextFind;              // refresh only
     private int _refreshing;
 
     private sealed record Box(Native.RECT Rect);
@@ -94,11 +95,14 @@ public sealed class TraySpeaker : IDisposable
             if (taskbar != _taskbar) _refind = true;
             _taskbar = taskbar;
 
-            // the element is looked up again when the device, the taskbar or its name changed
-            if (_refind || _element == null || !(_element.Current.Name ?? "").Contains(device, StringComparison.OrdinalIgnoreCase))
+            // the element is looked up again when the device, the taskbar or its name changed;
+            // while it cannot be found (another output, a hidden icon), only every 10 s
+            if (_refind || (_element == null && Environment.TickCount64 >= _nextFind) ||
+                (_element != null && !(_element.Current.Name ?? "").Contains(device, StringComparison.OrdinalIgnoreCase)))
             {
                 _refind = false;
                 _element = Find(taskbar, device);
+                if (_element == null) _nextFind = Environment.TickCount64 + 10_000;
             }
             var icon = _element != null && RectOf(_element) is { } r ? new Box(r) : null;
             if (icon != _icon && PerfLog.Enabled)
@@ -118,14 +122,25 @@ public sealed class TraySpeaker : IDisposable
         }
     }
 
+    /// <summary>
+    /// The speaker icon among the shell's own child windows of the taskbar. AuraFlyout's taskbar items
+    /// are child windows of the taskbar too: a search from the taskbar itself would walk them as well,
+    /// through their UI thread, and make WPF build (and keep) automation peers for every element.
+    /// </summary>
     private static AutomationElement? Find(IntPtr taskbar, string device)
     {
-        var buttons = AutomationElement.FromHandle(taskbar).FindAll(TreeScope.Descendants,
-            new PropertyCondition(AutomationElement.AutomationIdProperty, "SystemTrayIcon"));
-        foreach (AutomationElement b in buttons)
+        uint self = (uint)Environment.ProcessId;
+        var condition = new PropertyCondition(AutomationElement.AutomationIdProperty, "SystemTrayIcon");
+        for (IntPtr child = Native.FindWindowEx(taskbar, IntPtr.Zero, null, null); child != IntPtr.Zero;
+             child = Native.FindWindowEx(taskbar, child, null, null))
         {
-            if ((b.Current.Name ?? "").Contains(device, StringComparison.OrdinalIgnoreCase))
-                return b;
+            Native.GetWindowThreadProcessId(child, out uint pid);
+            if (pid == self) continue;
+            foreach (AutomationElement b in AutomationElement.FromHandle(child).FindAll(TreeScope.Subtree, condition))
+            {
+                if ((b.Current.Name ?? "").Contains(device, StringComparison.OrdinalIgnoreCase))
+                    return b;
+            }
         }
         return null;
     }

@@ -29,6 +29,7 @@ public sealed class GameOverlay : Window
     private readonly Border _box;
     private readonly DispatcherTimer _timer;
     private IntPtr _hwnd;
+    private bool _closed;
     private bool _hiddenByHotkey;
     private string _shape = "";
     private readonly Dictionary<string, TextBlock> _values = [];
@@ -62,7 +63,7 @@ public sealed class GameOverlay : Window
         S.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName != null && e.PropertyName.StartsWith("Overlay")) Rebuild();
-            if (e.PropertyName == nameof(AppSettings.OverlayEnabled) && S.OverlayEnabled && !_timer.IsEnabled) _timer.Start();
+            if (e.PropertyName == nameof(AppSettings.OverlayEnabled) && S.OverlayEnabled && !_timer.IsEnabled && !_closed) _timer.Start();
         };
         ThemeService.Changed += Rebuild;
         Rebuild();
@@ -83,6 +84,14 @@ public sealed class GameOverlay : Window
         Show();
         Hide();
         _timer.Start();
+    }
+
+    // closed at exit (or by the session ending): the timer must not show it again
+    protected override void OnClosed(EventArgs e)
+    {
+        _closed = true;
+        _timer.Stop();
+        base.OnClosed(e);
     }
 
     /// <summary>The shortcut: hides the readout until pressed again (for this session).</summary>

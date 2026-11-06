@@ -179,7 +179,11 @@ public partial class App : Application
             Log.Error("Unhandled UI exception", args.Exception);
             args.Handled = true;
         };
-        AppDomain.CurrentDomain.UnhandledException += (_, args) => Log.Error("Unhandled exception", args.ExceptionObject as Exception);
+        AppDomain.CurrentDomain.UnhandledException += (_, args) =>
+        {
+            Log.Error("Unhandled exception", args.ExceptionObject as Exception);
+            if (args.IsTerminating) CrashDump.Write();
+        };
         TaskScheduler.UnobservedTaskException += (_, args) =>
         {
             Log.Warn("Unobserved task exception", args.Exception);
