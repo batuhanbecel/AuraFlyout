@@ -15,8 +15,8 @@
     <ApplicationIcon>Assets\AuraFlyout.ico</ApplicationIcon>
     <Platforms>x64;ARM64</Platforms>
     <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
-    <Version>1.0.1</Version>
-    <!-- "1.0.1", not "1.0.1+<commit>", in the file's product version -->
+    <Version>1.0.2</Version>
+    <!-- the plain version, without "+<commit>", in the file's product version -->
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
     <Product>AuraFlyout</Product>
     <Company>AuraFlyout</Company>

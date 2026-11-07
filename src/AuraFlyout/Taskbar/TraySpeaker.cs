@@ -129,13 +129,9 @@ public sealed class TraySpeaker : IDisposable
     /// </summary>
     private static AutomationElement? Find(IntPtr taskbar, string device)
     {
-        uint self = (uint)Environment.ProcessId;
         var condition = new PropertyCondition(AutomationElement.AutomationIdProperty, "SystemTrayIcon");
-        for (IntPtr child = Native.FindWindowEx(taskbar, IntPtr.Zero, null, null); child != IntPtr.Zero;
-             child = Native.FindWindowEx(taskbar, child, null, null))
+        foreach (IntPtr child in TaskbarDock.ShellChildren(taskbar))
         {
-            Native.GetWindowThreadProcessId(child, out uint pid);
-            if (pid == self) continue;
             foreach (AutomationElement b in AutomationElement.FromHandle(child).FindAll(TreeScope.Subtree, condition))
             {
                 if ((b.Current.Name ?? "").Contains(device, StringComparison.OrdinalIgnoreCase))

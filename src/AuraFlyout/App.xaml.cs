@@ -284,6 +284,7 @@ public partial class App : Application
         Media.Updated += UpdateTrayTooltip;
 
         EnsureDocks();
+        WatchDisplayResets();
         StartSpectrumController();
         Audio.DeviceChanged += () =>
         {
@@ -386,16 +387,64 @@ public partial class App : Application
         }
     }
 
+    /// <summary>
+    /// When the taskbar items draw themselves anew (<see cref="DockWindow.Repaint"/>): the display
+    /// changed, the PC woke up or was unlocked, and a few times in the first minutes, while the
+    /// display driver may still reset (it does around sign-in).
+    /// </summary>
+    private void WatchDisplayResets()
+    {
+        void Soon() => Dispatcher.BeginInvoke(() => RunLater(1500, TaskbarDock.RepaintAll));
+        Microsoft.Win32.SystemEvents.DisplaySettingsChanged += (_, _) => Soon();
+        Microsoft.Win32.SystemEvents.PowerModeChanged += (_, e) =>
+        {
+            if (e.Mode == Microsoft.Win32.PowerModes.Resume) Soon();
+        };
+        Microsoft.Win32.SystemEvents.SessionSwitch += (_, e) =>
+        {
+            if (e.Reason is Microsoft.Win32.SessionSwitchReason.SessionUnlock or Microsoft.Win32.SessionSwitchReason.ConsoleConnect) Soon();
+        };
+        foreach (int seconds in new[] { 15, 45, 90 }) RunLater(seconds * 1000, TaskbarDock.RepaintAll);
+    }
+
     private bool _rebuildPending;
+    private Native.RECT _taskbarSeen;
+    private long _taskbarSeenAt;
+
+    /// <summary>
+    /// Right after sign-in (or an explorer restart) the taskbar exists before it is finished: explorer
+    /// still moves and resizes it, and its content arrives last. Items made then showed up off the
+    /// taskbar first and stayed blank afterwards, so they wait for its content and for it to stay put 1.5 s.
+    /// </summary>
+    private bool TaskbarSettled(IntPtr taskbar)
+    {
+        if (taskbar == IntPtr.Zero) return false;
+        string content = Environment.OSVersion.Version.Build >= 22000
+            ? "Windows.UI.Composition.DesktopWindowContentBridge" // Windows 11: the XAML taskbar
+            : "TrayNotifyWnd";
+        // compared by name: FindWindowEx does not find the XAML bridge by its class alone
+        bool ready = false;
+        for (IntPtr c = Native.FindWindowEx(taskbar, IntPtr.Zero, null, null); c != IntPtr.Zero && !ready;
+             c = Native.FindWindowEx(taskbar, c, null, null))
+            ready = Native.GetClassName(c) == content && Native.IsWindowVisible(c);
+        if (!ready || !Native.GetWindowRect(taskbar, out var r)) return false;
+        long now = Environment.TickCount64;
+        if (!r.Equals(_taskbarSeen))
+        {
+            _taskbarSeen = r;
+            _taskbarSeenAt = now;
+        }
+        return now - _taskbarSeenAt >= 1500;
+    }
 
     /// <summary>Creates / closes the taskbar items that are switched on / off.</summary>
     private void EnsureDocks()
     {
         if (IsShuttingDown) return;
-        if (Native.FindWindow("Shell_TrayWnd", null) == IntPtr.Zero)
+        if (!TaskbarSettled(Native.FindWindow("Shell_TrayWnd", null)))
         {
             // explorer not ready yet: try again shortly
-            RunLater(2000, EnsureDocks);
+            RunLater(500, EnsureDocks);
             return;
         }
 

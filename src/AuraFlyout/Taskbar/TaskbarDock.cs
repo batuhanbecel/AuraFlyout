@@ -57,6 +57,12 @@ public static class TaskbarDock
         Invalidate();
     }
 
+    /// <summary>Every item draws itself anew (see <see cref="DockWindow.Repaint"/>).</summary>
+    public static void RepaintAll()
+    {
+        foreach (var w in Windows.ToList()) w.Repaint();
+    }
+
     /// <summary>Coalesced re-layout on the next dispatcher idle.</summary>
     public static void Invalidate()
     {
@@ -281,11 +287,8 @@ public static class TaskbarDock
                 {
                     _shellFor = taskbar;
                     _shellFound = now;
-                    var root = AutomationElement.FromHandle(taskbar);
-                    _iconsElement = root?.FindFirst(TreeScope.Descendants,
-                        new PropertyCondition(AutomationElement.AutomationIdProperty, "TaskbarFrameRepeater"));
-                    _widgetsElement = root?.FindFirst(TreeScope.Descendants,
-                        new PropertyCondition(AutomationElement.AutomationIdProperty, "WidgetsButton"));
+                    _iconsElement = FindInShell(taskbar, "TaskbarFrameRepeater");
+                    _widgetsElement = FindInShell(taskbar, "WidgetsButton");
                 }
                 icons = RectOf(_iconsElement);
                 widgets = RectOf(_widgetsElement);
@@ -304,6 +307,35 @@ public static class TaskbarDock
                 if (changed) Invalidate();
             });
         });
+    }
+
+    /// <summary>
+    /// The taskbar's child windows that belong to the shell. AuraFlyout's items are children of the
+    /// taskbar too; a UI Automation search from the taskbar itself would walk them as well, through
+    /// our UI thread, and make WPF build (and keep) automation peers for all of their elements.
+    /// </summary>
+    internal static List<IntPtr> ShellChildren(IntPtr taskbar)
+    {
+        var list = new List<IntPtr>();
+        uint self = (uint)Environment.ProcessId;
+        for (IntPtr child = Native.FindWindowEx(taskbar, IntPtr.Zero, null, null); child != IntPtr.Zero;
+             child = Native.FindWindowEx(taskbar, child, null, null))
+        {
+            Native.GetWindowThreadProcessId(child, out uint pid);
+            if (pid != self) list.Add(child);
+        }
+        return list;
+    }
+
+    private static AutomationElement? FindInShell(IntPtr taskbar, string automationId)
+    {
+        var condition = new PropertyCondition(AutomationElement.AutomationIdProperty, automationId);
+        foreach (IntPtr child in ShellChildren(taskbar))
+        {
+            if (AutomationElement.FromHandle(child).FindFirst(TreeScope.Subtree, condition) is { } found)
+                return found;
+        }
+        return null;
     }
 
     private static Native.RECT? RectOf(AutomationElement? el)

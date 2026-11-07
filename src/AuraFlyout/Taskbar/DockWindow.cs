@@ -212,6 +212,21 @@ public abstract class DockWindow : Window
         return false;
     }
 
+    /// <summary>
+    /// Draws the item anew. A transparent (layered) WPF window can lose what it drew when the display
+    /// driver resets, as it does around sign-in, and then stays blank until its size changes: items
+    /// whose width changes came back by themselves, fixed-width ones did not. A 1 px resize and back
+    /// gives it a new surface.
+    /// </summary>
+    internal void Repaint()
+    {
+        if (_hwnd == IntPtr.Zero || !_shown) return;
+        var r = ScreenRect;
+        const uint flags = Native.SWP_NOMOVE | Native.SWP_NOZORDER | Native.SWP_NOACTIVATE;
+        Native.SetWindowPos(_hwnd, IntPtr.Zero, 0, 0, r.Width + 1, r.Height, flags);
+        Native.SetWindowPos(_hwnd, IntPtr.Zero, 0, 0, r.Width, r.Height, flags);
+    }
+
     internal void Unplace()
     {
         if (_hwnd == IntPtr.Zero || !_shown) return;
