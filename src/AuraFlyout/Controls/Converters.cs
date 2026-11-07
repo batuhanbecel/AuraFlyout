@@ -12,7 +12,8 @@ public sealed class BoolToVisibilityConverter : IValueConverter
     {
         bool b = value is bool v && v;
         if (parameter as string == "Invert") b = !b;
-        return b ? Visibility.Visible : Visibility.Collapsed;
+        // "Hidden" keeps the element's space, so a row without it lines up with the rows that have it
+        return b ? Visibility.Visible : parameter as string == "Hidden" ? Visibility.Hidden : Visibility.Collapsed;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>

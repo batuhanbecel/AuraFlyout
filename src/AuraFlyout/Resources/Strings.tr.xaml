@@ -542,4 +542,5 @@
     <sys:String x:Key="Volume_TraySpeakerDesc">Tıklayınca Windows hızlı ayarları yerine uygulama mikseri açılır, tekerlek sesi değiştirir. Ağ simgesi hızlı ayarları açmaya devam eder</sys:String>
     <sys:String x:Key="Volume_PositionDesc">Ses ve parlaklık göstergesinin yeri; ses simgesinden açılan mikser simgenin üstünde açılır</sys:String>
     <sys:String x:Key="Logi_TestNotificationDesc">Bağlı bir cihaz için örnek bir bildirim gösterir</sys:String>
+    <sys:String x:Key="Logi_OtherDevices">Diğer cihazlar</sys:String>
 </ResourceDictionary>

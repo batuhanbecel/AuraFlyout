@@ -542,4 +542,5 @@
     <sys:String x:Key="Volume_TraySpeakerDesc">A click opens the app mixer instead of the Windows quick settings, and the wheel changes the volume. The network icon still opens the quick settings</sys:String>
     <sys:String x:Key="Volume_PositionDesc">Where the volume and brightness indicator appears; the mixer opened from the speaker icon opens above the icon</sys:String>
     <sys:String x:Key="Logi_TestNotificationDesc">Shows a sample notification for a connected device</sys:String>
+    <sys:String x:Key="Logi_OtherDevices">Other devices</sys:String>
 </ResourceDictionary>

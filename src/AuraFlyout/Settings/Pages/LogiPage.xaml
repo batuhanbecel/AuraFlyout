@@ -24,7 +24,7 @@
                                 <ui:Button Icon="{ui:SymbolIcon EyeOff24}" Margin="0,0,6,0" Tag="{Binding}" Click="Hide_Click" ToolTip="{DynamicResource Logi_Hide}" />
                                 <ui:Button Icon="{ui:SymbolIcon Delete24}" Tag="{Binding}" Click="Forget_Click" ToolTip="{DynamicResource Logi_Forget}"
                                            IsEnabled="{Binding Connected, Converter={StaticResource InvertBool}}"
-                                           Visibility="{Binding CanForget, Converter={StaticResource BoolToVis}}" />
+                                           Visibility="{Binding CanForget, Converter={StaticResource BoolToVis}, ConverterParameter=Hidden}" />
                             </StackPanel>
                         </c:SettingCard>
                     </DataTemplate>
@@ -34,6 +34,8 @@
                        Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
             <ui:Button Content="{DynamicResource Logi_Refresh}" Icon="{ui:SymbolIcon ArrowSync24}" Margin="0,4,0,0" Click="Refresh_Click" />
 
+            <!-- the sources besides Logitech: their own group, so the refresh button closes the device list -->
+            <c:SettingHeader Text="{DynamicResource Logi_OtherDevices}" />
             <c:SettingCard Icon="Bluetooth24" Title="{DynamicResource Logi_Bluetooth}" Description="{DynamicResource Logi_BluetoothDesc}">
                 <ui:ToggleSwitch IsChecked="{Binding BluetoothBatteryEnabled}" />
             </c:SettingCard>
